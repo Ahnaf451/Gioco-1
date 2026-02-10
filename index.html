@@ -3,61 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>San Valentino</title>
+    <title>Per il mio Valentino</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            font-family: 'Arial', sans-serif;
+            padding: 20px;
             background-color: #ffebee;
-            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            text-align: center;
         }
 
         h1 {
             color: #d32f2f;
-            font-size: 2.5rem;
-            text-align: center;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 20px;
+        }
+
+        /* Container Video ottimizzato */
+        .video-wrapper {
+            width: 100%;
+            max-width: 400px; /* Misura ideale per smartphone e tablet */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            display: block;
         }
 
         .buttons {
             display: flex;
             gap: 20px;
+            justify-content: center;
             align-items: center;
-            margin-top: 30px;
+            width: 100%;
+            height: 100px;
+            position: relative;
         }
 
         button {
-            padding: 15px 30px;
+            padding: 15px 35px;
             font-size: 1.2rem;
+            font-weight: bold;
             border: none;
-            border-radius: 10px;
+            border-radius: 50px;
             cursor: pointer;
             transition: transform 0.2s ease;
+            z-index: 10;
         }
 
         #si {
             background-color: #4caf50;
             color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
         }
 
         #no {
             background-color: #f44336;
             color: white;
-            position: absolute;
-        }
-
-        /* Classe per il contenitore quando i tasti non si muovono ancora */
-        .relative-position {
-            position: relative;
-            width: 100%;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+            position: absolute; /* Necessario per lo spostamento */
         }
     </style>
 </head>
@@ -65,32 +80,50 @@
 
     <h1>Vuoi diventare il mio Valentino? ❤️</h1>
 
-    <div class="relative-position">
+    <div class="video-wrapper">
+        <video autoplay loop muted playsinline>
+            <source src="Video Project 1.mp4" type="video/mp4">
+            Il tuo browser non supporta il video.
+        </video>
+    </div>
+
+    <div class="buttons">
         <button id="si" onclick="vittoria()">SÌ</button>
-        <button id="no" onmouseover="scappa()" onclick="scappa()">NO</button>
+        <button id="no" onmouseover="scappa()" ontouchstart="scappa()">NO</button>
     </div>
 
     <script>
         let scalaSi = 1;
 
         function scappa() {
-            const noBtn = document.getElementById('no');
+            const btnNo = document.getElementById('no');
             
-            // Calcola posizioni casuali (evitando di uscire dallo schermo)
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            // Calcolo limiti per non far sparire il tasto fuori dallo schermo
+            const maxX = window.innerWidth - btnNo.offsetWidth - 20;
+            const maxY = window.innerHeight - btnNo.offsetHeight - 20;
 
-            // Ingrandisce il tasto SÌ
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            btnNo.style.position = "fixed";
+            btnNo.style.left = randomX + "px";
+            btnNo.style.top = randomY + "px";
+
+            // Ingrandisce il tasto SI
             scalaSi += 0.3;
             document.getElementById('si').style.transform = `scale(${scalaSi})`;
         }
 
         function vittoria() {
-            alert("Sapevo che avresti detto di sì! 😍");
-            document.body.innerHTML = "<h1>Evviva! ❤️ Buon San Valentino!</h1><p style='font-size: 5rem;'>🌹</p>";
+            document.body.innerHTML = `
+                <h1 style="font-size: 3rem;">Sapevo che avresti detto di sì! 😍</h1>
+                <div class="video-wrapper">
+                    <video autoplay loop muted playsinline>
+                        <source src="Video Project 1.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <p style="font-size: 4rem;">💖✨🌹</p>
+            `;
         }
     </script>
 </body>
