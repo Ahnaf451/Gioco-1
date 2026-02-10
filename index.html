@@ -15,7 +15,7 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            /* Modifica Sfondo con Hello Kitty */
+            /* Sfondo Hello Kitty */
             background-image: url('hellokitty.png');
             background-size: cover;
             background-position: center;
@@ -34,15 +34,17 @@
             justify-content: center;
             width: 100%;
             max-width: 600px;
-            /* Aggiunto un leggero sfondo semitrasparente per leggere meglio i testi se necessario */
-            background-color: rgba(255, 255, 255, 0.4);
-            padding: 20px;
+            /* Rettangolo nero molto opaco */
+            background-color: rgba(0, 0, 0, 0.8); 
+            color: white; /* Colore testo base bianco per contrasto */
+            padding: 30px;
             border-radius: 30px;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(5px); /* Effetto sfocatura dietro il nero */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
         h1 {
-            color: #d32f2f;
+            color: #ff4d4d; /* Un rosso leggermente più acceso per risaltare sul nero */
             font-size: clamp(1.5rem, 7vw, 2.5rem);
             margin-bottom: 20px;
         }
@@ -165,7 +167,7 @@
                 `;
             } else {
                 content.innerHTML = `
-                    <h1>Eh volevi! Aspetta il 14 Febbraio... 😜</h1>
+                    <h2 style="margin-top:20px; color: white;">Eh volevi! Aspetta il 14 Febbraio... 😜</h2>
                     <div class="media-wrapper" style="margin: 20px auto;">
                         <img src="coughing-cat-b-1200x1200.jpg" alt="Gatto che tossisce">
                     </div>
