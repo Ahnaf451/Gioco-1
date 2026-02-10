@@ -36,7 +36,6 @@
             margin-bottom: 20px;
         }
 
-        /* Container per Video e Foto */
         .media-wrapper {
             width: 100%;
             max-width: 350px;
@@ -51,7 +50,8 @@
 
         .buttons-area {
             display: flex;
-            gap: 40px;
+            flex-direction: row;
+            gap: 40px; 
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -71,7 +71,7 @@
         }
 
         #si { background-color: #4caf50; color: white; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); }
-        #no { background-color: #f44336; color: white; position: absolute; }
+        #no { background-color: #f44336; color: white; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); }
         
         .btn-rosa {
             background-color: #c2185b;
@@ -82,14 +82,13 @@
         }
 
         #timer {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #d32f2f;
             margin-top: 15px;
             font-weight: bold;
             background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -98,7 +97,7 @@
     <div class="container" id="content">
         <h1>Vuoi diventare il mio Valentino? ❤️✨</h1>
 
-        <div class="media-wrapper" id="video-minion">
+        <div class="media-wrapper">
             <video autoplay loop muted playsinline>
                 <source src="Video Project 1.mp4" type="video/mp4">
             </video>
@@ -127,23 +126,26 @@
         }
 
         function vittoria() {
-            const areaPulsanti = document.getElementById('area-pulsanti');
-            const titolo = document.querySelector('h1');
-            
-            titolo.innerHTML = "Era così ovvio che avresti detto di sì! 😏💖";
-            
-            // Rimuovo i tasti SI/NO e metto quello rosa
-            areaPulsanti.innerHTML = `
+            const content = document.getElementById('content');
+            // Sostituiamo il contenuto ma manteniamo il video del minion per ora
+            content.innerHTML = `
+                <h1>Era così ovvio che avresti detto di sì! 😏💖</h1>
+                <div class="media-wrapper">
+                    <video autoplay loop muted playsinline>
+                        <source src="Video Project 1.mp4" type="video/mp4">
+                    </video>
+                </div>
                 <button class="btn-rosa" id="btn-scopri" onclick="scopriSorpresa()" style="display:inline-block;">
                     Clicca qui per scoprire il regalo 🎁
                 </button>
+                <div id="sorpresa-area"></div>
             `;
         }
 
         function scopriSorpresa() {
             const content = document.getElementById('content');
             const oggi = new Date();
-            const sanValentino = new Date(2026, 1, 14); // 14 Febbraio 2026
+            const sanValentino = new Date(2026, 1, 14); 
 
             if (oggi >= sanValentino) {
                 document.body.innerHTML = `
@@ -152,10 +154,10 @@
                     </div>
                 `;
             } else {
-                // IL MINION VA VIA QUI: Sostituisco tutto il contenuto del container
+                // Qui il Minion sparisce e appaiono solo le 3 cose: scritta, gatto e timer
                 content.innerHTML = `
                     <h1>Eh volevi! Aspetta il 14 Febbraio... 😜</h1>
-                    <div class="media-wrapper">
+                    <div class="media-wrapper" style="margin: 20px auto;">
                         <img src="coughing-cat-b-1200x1200.jpg" alt="Gatto che tossisce">
                     </div>
                     <div id="timer"></div>
@@ -165,7 +167,7 @@
         }
 
         function avviaTimer(targetDate) {
-            function aggiorna() {
+            function update() {
                 const adesso = new Date().getTime();
                 const distanza = targetDate.getTime() - adesso;
 
@@ -184,8 +186,8 @@
                     location.reload();
                 }
             }
-            aggiorna();
-            const x = setInterval(aggiorna, 1000);
+            update();
+            const x = setInterval(update, 1000);
         }
     </script>
 </body>
