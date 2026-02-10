@@ -21,14 +21,13 @@
 
         h1 {
             color: #d32f2f;
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
             margin-bottom: 20px;
         }
 
-        /* Container Video ottimizzato */
-        .video-wrapper {
+        .video-wrapper, .image-wrapper {
             width: 100%;
-            max-width: 400px; /* Misura ideale per smartphone e tablet */
+            max-width: 400px;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -36,7 +35,7 @@
             background: #000;
         }
 
-        video {
+        video, img {
             width: 100%;
             display: block;
         }
@@ -47,7 +46,7 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 100px;
+            height: 120px;
             position: relative;
         }
 
@@ -62,34 +61,39 @@
             z-index: 10;
         }
 
-        #si {
-            background-color: #4caf50;
+        #si { background-color: #4caf50; color: white; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); }
+        #no { background-color: #f44336; color: white; position: absolute; }
+        
+        .btn-rosa {
+            background-color: #c2185b; /* Rosa scuro */
             color: white;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            margin-top: 20px;
+            display: none; /* Appare dopo il SI */
         }
 
-        #no {
-            background-color: #f44336;
-            color: white;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
-            position: absolute; /* Necessario per lo spostamento */
+        #timer {
+            font-size: 1.5rem;
+            color: #d32f2f;
+            margin-top: 15px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <h1>Vuoi diventare il mio Valentino? ❤️</h1>
+    <div id="main-content">
+        <h1>Vuoi diventare il mio Valentino? ❤️</h1>
 
-    <div class="video-wrapper">
-        <video autoplay loop muted playsinline>
-            <source src="Video Project 1.mp4" type="video/mp4">
-            Il tuo browser non supporta il video.
-        </video>
-    </div>
+        <div class="video-wrapper">
+            <video autoplay loop muted playsinline>
+                <source src="Video Project 1.mp4" type="video/mp4">
+            </video>
+        </div>
 
-    <div class="buttons">
-        <button id="si" onclick="vittoria()">SÌ</button>
-        <button id="no" onmouseover="scappa()" ontouchstart="scappa()">NO</button>
+        <div class="buttons">
+            <button id="si" onclick="vittoria()">SÌ</button>
+            <button id="no" onmouseover="scappa()" ontouchstart="scappa()">NO</button>
+        </div>
     </div>
 
     <script>
@@ -97,33 +101,72 @@
 
         function scappa() {
             const btnNo = document.getElementById('no');
-            
-            // Calcolo limiti per non far sparire il tasto fuori dallo schermo
             const maxX = window.innerWidth - btnNo.offsetWidth - 20;
             const maxY = window.innerHeight - btnNo.offsetHeight - 20;
-
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-
             btnNo.style.position = "fixed";
-            btnNo.style.left = randomX + "px";
-            btnNo.style.top = randomY + "px";
-
-            // Ingrandisce il tasto SI
+            btnNo.style.left = Math.floor(Math.random() * maxX) + "px";
+            btnNo.style.top = Math.floor(Math.random() * maxY) + "px";
             scalaSi += 0.3;
             document.getElementById('si').style.transform = `scale(${scalaSi})`;
         }
 
         function vittoria() {
-            document.body.innerHTML = `
-                <h1 style="font-size: 3rem;">Sapevo che avresti detto di sì! 😍</h1>
-                <div class="video-wrapper">
-                    <video autoplay loop muted playsinline>
-                        <source src="Video Project 1.mp4" type="video/mp4">
-                    </video>
+            const content = document.getElementById('main-content');
+            content.innerHTML = `
+                <h1>Era così ovvio che avresti detto di sì!</h1>
+                <div class="image-wrapper">
+                    <img src="coughing-cat-b-1200x1200.jpg" alt="Gatto">
                 </div>
-                <p style="font-size: 4rem;">💖✨🌹</p>
+                <button class="btn-rosa" onclick="scopriSorpresa()">Clicca qui per scoprire</button>
+                <div id="sorpresa-area"></div>
             `;
+            document.querySelector('.btn-rosa').style.display = 'inline-block';
+        }
+
+        function scopriSorpresa() {
+            const area = document.getElementById('sorpresa-area');
+            const oggi = new Date();
+            const sanValentino = new Date(oggi.getFullYear(), 1, 14); // 14 Febbraio
+
+            if (oggi >= sanValentino) {
+                // È IL 14 FEBBRAIO!
+                document.body.innerHTML = `
+                    <div style="background-color: white; height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center;">
+                        <h1 style="font-size: 5rem; color: #d32f2f;">BLUBLUBLUBLU</h1>
+                    </div>
+                `;
+            } else {
+                // NON È ANCORA IL 14
+                area.innerHTML = `
+                    <h2 style="margin-top:20px;">Eh volevi! Aspetta il 14 Febbraio...</h2>
+                    <div id="timer"></div>
+                `;
+                avviaTimer();
+            }
+        }
+
+        function avviaTimer() {
+            const target = new Date(new Date().getFullYear(), 1, 14).getTime();
+            
+            const x = setInterval(function() {
+                const adesso = new Date().getTime();
+                const distanza = target - adesso;
+
+                const giorni = Math.floor(distanza / (1000 * 60 * 60 * 24));
+                const ore = Math.floor((distanza % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minuti = Math.floor((distanza % (1000 * 60 * 60)) / (1000 * 60));
+                const secondi = Math.floor((distanza % (1000 * 60)) / 1000);
+
+                const timerElement = document.getElementById("timer");
+                if (timerElement) {
+                    timerElement.innerHTML = giorni + "d " + ore + "h " + minuti + "m " + secondi + "s ";
+                }
+
+                if (distanza < 0) {
+                    clearInterval(x);
+                    location.reload(); // Ricarica per sbloccare la sorpresa
+                }
+            }, 1000);
         }
     </script>
 </body>
