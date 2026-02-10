@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Valentino</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffebee;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        #si {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        #no {
+            background-color: #f44336;
+            color: white;
+            position: absolute;
+        }
+
+        /* Classe per il contenitore quando i tasti non si muovono ancora */
+        .relative-position {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Vuoi diventare il mio Valentino? ❤️</h1>
+
+    <div class="relative-position">
+        <button id="si" onclick="vittoria()">SÌ</button>
+        <button id="no" onmouseover="scappa()" onclick="scappa()">NO</button>
+    </div>
+
+    <script>
+        let scalaSi = 1;
+
+        function scappa() {
+            const noBtn = document.getElementById('no');
+            
+            // Calcola posizioni casuali (evitando di uscire dallo schermo)
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Ingrandisce il tasto SÌ
+            scalaSi += 0.3;
+            document.getElementById('si').style.transform = `scale(${scalaSi})`;
+        }
+
+        function vittoria() {
+            alert("Sapevo che avresti detto di sì! 😍");
+            document.body.innerHTML = "<h1>Evviva! ❤️ Buon San Valentino!</h1><p style='font-size: 5rem;'>🌹</p>";
+        }
+    </script>
+</body>
+</html>
