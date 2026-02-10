@@ -15,7 +15,13 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            background-color: #ffebee;
+            /* Modifica Sfondo con Hello Kitty */
+            background-image: url('hellokitty.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
             font-family: 'Arial', sans-serif;
             overflow-x: hidden;
             text-align: center;
@@ -28,6 +34,11 @@
             justify-content: center;
             width: 100%;
             max-width: 600px;
+            /* Aggiunto un leggero sfondo semitrasparente per leggere meglio i testi se necessario */
+            background-color: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(2px);
         }
 
         h1 {
@@ -127,7 +138,6 @@
 
         function vittoria() {
             const content = document.getElementById('content');
-            // Sostituiamo il contenuto ma manteniamo il video del minion per ora
             content.innerHTML = `
                 <h1>Era così ovvio che avresti detto di sì! 😏💖</h1>
                 <div class="media-wrapper">
@@ -154,7 +164,6 @@
                     </div>
                 `;
             } else {
-                // Qui il Minion sparisce e appaiono solo le 3 cose: scritta, gatto e timer
                 content.innerHTML = `
                     <h1>Eh volevi! Aspetta il 14 Febbraio... 😜</h1>
                     <div class="media-wrapper" style="margin: 20px auto;">
