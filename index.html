@@ -36,6 +36,7 @@
             margin-bottom: 20px;
         }
 
+        /* Container per Video e Foto */
         .media-wrapper {
             width: 100%;
             max-width: 350px;
@@ -50,8 +51,7 @@
 
         .buttons-area {
             display: flex;
-            flex-direction: row;
-            gap: 40px; /* Più spazio per evitare tocchi accidentali su mobile */
+            gap: 40px;
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -71,7 +71,7 @@
         }
 
         #si { background-color: #4caf50; color: white; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); }
-        #no { background-color: #f44336; color: white; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); }
+        #no { background-color: #f44336; color: white; position: absolute; }
         
         .btn-rosa {
             background-color: #c2185b;
@@ -82,13 +82,14 @@
         }
 
         #timer {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: #d32f2f;
             margin-top: 15px;
             font-weight: bold;
             background: white;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
         }
     </style>
 </head>
@@ -97,13 +98,13 @@
     <div class="container" id="content">
         <h1>Vuoi diventare il mio Valentino? ❤️✨</h1>
 
-        <div class="media-wrapper">
+        <div class="media-wrapper" id="video-minion">
             <video autoplay loop muted playsinline>
                 <source src="Video Project 1.mp4" type="video/mp4">
             </video>
         </div>
 
-        <div class="buttons-area">
+        <div class="buttons-area" id="area-pulsanti">
             <button id="si" onclick="vittoria()">SÌ ✅</button>
             <button id="no" onmouseover="scappa()" ontouchstart="scappa()">NO ❌</button>
         </div>
@@ -114,7 +115,6 @@
 
         function scappa() {
             const btnNo = document.getElementById('no');
-            // Calcolo per evitare che il tasto NO si sovrapponga al SI all'inizio
             const maxX = window.innerWidth - btnNo.offsetWidth - 20;
             const maxY = window.innerHeight - btnNo.offsetHeight - 20;
 
@@ -127,22 +127,21 @@
         }
 
         function vittoria() {
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h1>Era così ovvio che avresti detto di sì! 😏💖</h1>
-                <div class="media-wrapper">
-                    <video autoplay loop muted playsinline>
-                        <source src="Video Project 1.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <button class="btn-rosa" id="btn-scopri" onclick="scopriSorpresa()">Clicca qui per scoprire 🎁</button>
-                <div id="sorpresa-area"></div>
+            const areaPulsanti = document.getElementById('area-pulsanti');
+            const titolo = document.querySelector('h1');
+            
+            titolo.innerHTML = "Era così ovvio che avresti detto di sì! 😏💖";
+            
+            // Rimuovo i tasti SI/NO e metto quello rosa
+            areaPulsanti.innerHTML = `
+                <button class="btn-rosa" id="btn-scopri" onclick="scopriSorpresa()" style="display:inline-block;">
+                    Clicca qui per scoprire il regalo 🎁
+                </button>
             `;
-            document.getElementById('btn-scopri').style.display = 'inline-block';
         }
 
         function scopriSorpresa() {
-            const area = document.getElementById('sorpresa-area');
+            const content = document.getElementById('content');
             const oggi = new Date();
             const sanValentino = new Date(2026, 1, 14); // 14 Febbraio 2026
 
@@ -153,20 +152,20 @@
                     </div>
                 `;
             } else {
-                area.innerHTML = `
-                    <h2 style="margin-top:20px;">Eh volevi! Aspetta il 14 Febbraio... 😜</h2>
-                    <div class="media-wrapper" style="margin: 20px auto;">
+                // IL MINION VA VIA QUI: Sostituisco tutto il contenuto del container
+                content.innerHTML = `
+                    <h1>Eh volevi! Aspetta il 14 Febbraio... 😜</h1>
+                    <div class="media-wrapper">
                         <img src="coughing-cat-b-1200x1200.jpg" alt="Gatto che tossisce">
                     </div>
                     <div id="timer"></div>
                 `;
-                document.getElementById('btn-scopri').style.display = 'none';
                 avviaTimer(sanValentino);
             }
         }
 
         function avviaTimer(targetDate) {
-            const x = setInterval(function() {
+            function aggiorna() {
                 const adesso = new Date().getTime();
                 const distanza = targetDate.getTime() - adesso;
 
@@ -184,7 +183,9 @@
                     clearInterval(x);
                     location.reload();
                 }
-            }, 1000);
+            }
+            aggiorna();
+            const x = setInterval(aggiorna, 1000);
         }
     </script>
 </body>
