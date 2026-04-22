@@ -1,205 +1,39 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Per il mio Valentino ❤️</title>
-    <style>
-        * { box-sizing: border-box; }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            /* Sfondo Hello Kitty */
-            background-image: url('hellokitty.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
-            text-align: center;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 600px;
-            /* Rettangolo nero molto opaco */
-            background-color: rgba(0, 0, 0, 0.8); 
-            color: white; /* Colore testo base bianco per contrasto */
-            padding: 30px;
-            border-radius: 30px;
-            backdrop-filter: blur(5px); /* Effetto sfocatura dietro il nero */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-
-        h1 {
-            color: #ff4d4d; /* Un rosso leggermente più acceso per risaltare sul nero */
-            font-size: clamp(1.5rem, 7vw, 2.5rem);
-            margin-bottom: 20px;
-        }
-
-        .media-wrapper {
-            width: 100%;
-            max-width: 350px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-            background: #000;
-        }
-
-        video, img { width: 100%; display: block; }
-
-        .buttons-area {
-            display: flex;
-            flex-direction: row;
-            gap: 40px; 
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            min-height: 150px;
-            position: relative;
-        }
-
-        button {
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            z-index: 10;
-        }
-
-        #si { background-color: #4caf50; color: white; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); }
-        #no { background-color: #f44336; color: white; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4); }
-        
-        .btn-rosa {
-            background-color: #c2185b;
-            color: white;
-            margin-top: 20px;
-            display: none;
-            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.4);
-        }
-
-        #timer {
-            font-size: 1.5rem;
-            color: #d32f2f;
-            margin-top: 15px;
-            font-weight: bold;
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ti Pareva Facile</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="app">
+    <canvas id="game" width="960" height="540" aria-label="Gioco platform ragebait"></canvas>
 
-    <div class="container" id="content">
-        <h1>Vuoi diventare il mio Valentino? ❤️✨</h1>
+    <section class="overlay" id="startScreen">
+      <div class="panel">
+        <p class="eyebrow">Mini rage platformer</p>
+        <h1>TI PAREVA FACILE</h1>
+        <p class="copy">Salta, evita trappole invisibili e fidati pure dei checkpoint. Sicuro.</p>
+        <button id="startBtn">START</button>
+        <p class="hint">Muovi con WASD o frecce, salta con <b>Spazio</b>, riavvia con <b>R</b>.</p>
+      </div>
+    </section>
 
-        <div class="media-wrapper">
-            <video autoplay loop muted playsinline>
-                <source src="Video Project 1.mp4" type="video/mp4">
-            </video>
-        </div>
+    <section class="overlay hidden" id="endScreen">
+      <div class="panel">
+        <p class="eyebrow">Complimenti, credo</p>
+        <h2>Non hai vinto, ti ho solo lasciato passare.</h2>
+        <button id="restartBtn">RIPROVA</button>
+      </div>
+    </section>
 
-        <div class="buttons-area" id="area-pulsanti">
-            <button id="si" onclick="vittoria()">SÌ ✅</button>
-            <button id="no" onmouseover="scappa()" ontouchstart="scappa()">NO ❌</button>
-        </div>
+    <div class="hud">
+      <div>Morti: <span id="deaths">0</span></div>
+      <div>Tempo: <span id="time">0.0</span>s</div>
+      <div id="msg">Premi START e soffri in pace.</div>
     </div>
-
-    <script>
-        let scalaSi = 1;
-
-        function scappa() {
-            const btnNo = document.getElementById('no');
-            const maxX = window.innerWidth - btnNo.offsetWidth - 20;
-            const maxY = window.innerHeight - btnNo.offsetHeight - 20;
-
-            btnNo.style.position = "fixed";
-            btnNo.style.left = Math.floor(Math.random() * maxX) + "px";
-            btnNo.style.top = Math.floor(Math.random() * maxY) + "px";
-
-            scalaSi += 0.3;
-            document.getElementById('si').style.transform = `scale(${scalaSi})`;
-        }
-
-        function vittoria() {
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h1>Era così ovvio che avresti detto di sì! 😏💖</h1>
-                <div class="media-wrapper">
-                    <video autoplay loop muted playsinline>
-                        <source src="Video Project 1.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <button class="btn-rosa" id="btn-scopri" onclick="scopriSorpresa()" style="display:inline-block;">
-                    Clicca qui per scoprire il regalo 🎁
-                </button>
-                <div id="sorpresa-area"></div>
-            `;
-        }
-
-        function scopriSorpresa() {
-            const content = document.getElementById('content');
-            const oggi = new Date();
-            const sanValentino = new Date(2026, 1, 14); 
-
-            if (oggi >= sanValentino) {
-                document.body.innerHTML = `
-                    <div style="height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; background: #e3f2fd;">
-                        <h1 style="font-size: clamp(2rem, 10vw, 5rem); color: #0277bd;">BLUBLUBLUBLU 🌊🌀</h1>
-                    </div>
-                `;
-            } else {
-                content.innerHTML = `
-                    <h2 style="margin-top:20px; color: white;">Eh volevi! Aspetta il 14 Febbraio... 😜</h2>
-                    <div class="media-wrapper" style="margin: 20px auto;">
-                        <img src="coughing-cat-b-1200x1200.jpg" alt="Gatto che tossisce">
-                    </div>
-                    <div id="timer"></div>
-                `;
-                avviaTimer(sanValentino);
-            }
-        }
-
-        function avviaTimer(targetDate) {
-            function update() {
-                const adesso = new Date().getTime();
-                const distanza = targetDate.getTime() - adesso;
-
-                const giorni = Math.floor(distanza / (1000 * 60 * 60 * 24));
-                const ore = Math.floor((distanza % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minuti = Math.floor((distanza % (1000 * 60 * 60)) / (1000 * 60));
-                const secondi = Math.floor((distanza % (1000 * 60)) / 1000);
-
-                const timerElement = document.getElementById("timer");
-                if (timerElement) {
-                    timerElement.innerHTML = `⏳ ${giorni}g ${ore}o ${minuti}m ${secondi}s`;
-                }
-
-                if (distanza < 0) {
-                    clearInterval(x);
-                    location.reload();
-                }
-            }
-            update();
-            const x = setInterval(update, 1000);
-        }
-    </script>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
